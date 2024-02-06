@@ -2,7 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Audio } from "expo-av";
 import styles from "../../styles/styles";
-import uiConstants from "../../constants/uiConstants";
+import { AntDesign } from "@expo/vector-icons";
 
 const PlaySong = ({ songUrl }) => {
   const [sound, setSound] = useState(null);
@@ -19,7 +19,6 @@ const PlaySong = ({ songUrl }) => {
   const onPressPlay = async () => {
     try {
       if (playing) {
-        // Eğer zaten bir şarkı çalınıyorsa, önceki sesi durdur ve boşalt
         await sound.stopAsync();
         await sound.unloadAsync();
       }
@@ -52,17 +51,20 @@ const PlaySong = ({ songUrl }) => {
 
   return (
     <View>
-      <Pressable style={styles.playStopButtons} onPress={onPressPlay}>
-        <Text style={styles.playStopButtonsText}>
-          {uiConstants.Layout.PLAY}
-        </Text>
-      </Pressable>
-      {playing && (
-        <Pressable style={styles.playStopButtons} onPress={onPressStop}>
-          <Text style={styles.playStopButtonsText}>
-            {uiConstants.Layout.STOP}
-          </Text>
-        </Pressable>
+      {!playing ? (
+        <AntDesign
+          style={styles.playStopButtons}
+          name="play"
+          size={32}
+          onPress={onPressPlay}
+        />
+      ) : (
+        <AntDesign
+          style={styles.playStopButtons}
+          name="pausecircle"
+          size={32}
+          onPress={onPressStop}
+        />
       )}
     </View>
   );

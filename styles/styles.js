@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     listItemText: {
         fontSize: 18,
         fontWeight: 'bold',
-        textAlign: "center"
+        textAlign: "center",
     },
     listItemSingerText: {
         fontSize: 15,
@@ -55,20 +55,13 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     playStopButtons: {
-        width: '50%',
-        backgroundColor: COLORS.pink,
         borderRadius: 18,
-        height: 40,
         paddingVertical: 10,
         paddingHorizontal: 20,
         marginBottom: 10,
         marginTop: 5,
-        alignSelf: "center"
-    },
-    playStopButtonsText: {
-        textAlign: 'center',
-        fontSize: 15,
-        fontWeight: '700',
+        alignSelf: "center",
+        color: COLORS.pink
     },
     horizontalLineView: {
         flexDirection: "row",
@@ -102,17 +95,8 @@ const styles = StyleSheet.create({
         width: width / 15
     },
     searchButton: {
-        backgroundColor: COLORS.pink,
-        borderRadius: 18,
-        height: 40,
-        justifyContent: "center",
         alignSelf: 'flex-end',
         marginTop: width <= 600 ? 10 : 0,
-    },
-    searchButtonText: {
-        textAlign: 'center',
-        fontSize: 15,
-        fontWeight: '700',
     }
 });
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, SafeAreaView, FlatList, Dimensions } from "react-native";
 import searchSongs from "../helpers/searchSongs";
 import SongCards from "./cards/SongCards";
@@ -7,20 +7,19 @@ import Loading from "./Loading";
 import SearchBar from "./SearchBar";
 
 const Layout = () => {
-  // const navigation = useNavigation();
-
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("rihanna");
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(null);
+  const [total, setTotal] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const { width } = Dimensions.get("window");
   const columns = width <= 600 ? 2 : 3;
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     loadSongs();
-  }, []);
+  }, [page]);
 
   const loadSongs = () => {
     setLoading(true);
@@ -32,7 +31,7 @@ const Layout = () => {
     })
       .then((response) => {
         setSongs((prevSongs) => [...prevSongs, ...response.data.results]);
-        setTotalPages(response.data.totalPages);
+        setTotal(response.data.total);
       })
       .finally(() => {
         setLoading(false);
@@ -51,15 +50,18 @@ const Layout = () => {
   };
 
   const onEndReached = () => {
-    if (!loadingMore && page < totalPages) {
+    if (songs.length < total) {
       setLoadingMore(true);
-      setPage((prevPage) => prevPage + 1);
-      loadSongs();
+      setPage(page + 1);
     }
   };
 
-  const renderFooter = () => {
-    return loadingMore ? <Loading /> : null;
+  const onScroll = (event) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const paddingToBottom = 20;
+    if (layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom) {
+      onEndReached();
+    }
   };
 
   const onPressSinger = (primaryArtists) => {
@@ -78,6 +80,7 @@ const Layout = () => {
         onPressSearchCallback={onPressSearch}
       />
       <FlatList
+        ref={flatListRef}
         style={styles.flatListContainer}
         data={songs}
         numColumns={columns}
@@ -96,9 +99,9 @@ const Layout = () => {
           </View>
         )}
         keyExtractor={(item) => item.id.toString()}
-        onEndReached={onEndReached}
-        onEndReachedThreshold={0.1}
-        ListFooterComponent={renderFooter}
+        onScroll={onScroll}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={loadingMore ? <Loading /> : null}
       />
     </SafeAreaView>
   );

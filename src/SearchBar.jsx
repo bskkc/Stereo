@@ -2,6 +2,7 @@ import { SafeAreaView, TextInput, Pressable, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import styles from "../styles/styles";
 import uiConstants from "../constants/uiConstants";
+import { AntDesign } from "@expo/vector-icons";
 
 const SearchBar = ({
   handleSearchCallback,
@@ -16,9 +17,13 @@ const SearchBar = ({
         onChangeText={handleSearchCallback}
         value={searchText}
       />
-      <Pressable style={styles.searchButton} onPress={onPressSearchCallback}>
-        <Text style={styles.searchButtonText}>{uiConstants.Layout.SEARCH}</Text>
-      </Pressable>
+
+      <AntDesign
+        style={styles.searchButton}
+        name="search1"
+        size={18}
+        onPress={onPressSearchCallback}
+      />
     </SafeAreaView>
   );
 };
